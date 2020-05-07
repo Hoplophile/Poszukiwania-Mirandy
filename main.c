@@ -35,6 +35,7 @@ void count_number_of_rooms(FILE* file){
         if(buffer == ',') 
             number_of_rooms++;
     } while(buffer != '\n');
+    printf("Alright, there are %d rooms in this house and 1 hamster to find.\n", number_of_rooms);
     
     rewind(file);
 }
@@ -47,14 +48,12 @@ void get_rooms_graph_from_file(FILE *file, int **graph_array){
         do{
             buffer = (char)fgetc(file);
             if(buffer != ',') {
-                printf("%c, ", buffer);
                 graph_array[row][column] = (int)(buffer - '0');
                 column++;
             }
         }while(column < number_of_rooms);
         fgetc(file); // pass CR
         column = 0;
-        printf("\n");
     }
 
     rewind(file);
@@ -62,8 +61,7 @@ void get_rooms_graph_from_file(FILE *file, int **graph_array){
 
 void DFS(int room_number, int** rooms_graph, int* rooms_visited){
     current_depth++;
-    printf("going to room %d\n", room_number);
-    printf("DEPTH %d\n", current_depth);
+    printf("Entering room number %d (%d stage(s) from room with cage).\n", room_number, current_depth);
     
     if(current_depth > D) number_of_possible_rooms++;
 
@@ -72,17 +70,19 @@ void DFS(int room_number, int** rooms_graph, int* rooms_visited){
     // search for neighbour of current room
     for(int neighbour_number=0; neighbour_number<number_of_rooms; neighbour_number++){
         if(rooms_graph[room_number][neighbour_number] == 1){
-            printf("i found neighbour: %d\n", neighbour_number);
+            printf("It is connected with room number %d", neighbour_number);
             // check if found neighbour is not visited
             if(rooms_visited[neighbour_number] != true){
-                printf("neighbour %d not yet visited, entering room\n", neighbour_number);
+                printf(" and it's not been visited yet.\n-->\n", neighbour_number);
                 // call DFS for neighbour
                 DFS(neighbour_number, rooms_graph, rooms_visited);
+                printf(", going back to room number %d.\n<--\n", room_number);
             } else{
-                printf("already visited\n");
+                printf(", but it's already been visited.\n");
             }
         }
     }
+    printf("All rooms connected to room number %d are visited", room_number);
     current_depth--;
 }
 
@@ -95,7 +95,6 @@ int main(){
 
     input_data = fopen("input_data.txt", "r");
     count_number_of_rooms(input_data);
-    printf("Alright, there are %d rooms in this house.\n", number_of_rooms);
 
     rooms_graph = rooms_graph_init();
     rooms_visited = rooms_visited_init();
@@ -103,7 +102,8 @@ int main(){
     get_rooms_graph_from_file(input_data, rooms_graph);
 
     DFS(0, rooms_graph, rooms_visited);
-    printf("possible rooms: %d", number_of_possible_rooms);
+
+    printf("\n\nMiranda may be in %d rooms", number_of_possible_rooms);
 
     free(rooms_graph);
     free(rooms_visited);
