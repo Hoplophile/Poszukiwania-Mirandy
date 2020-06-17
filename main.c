@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-int D = 1;
 int current_depth;
 int number_of_rooms;
-int number_of_possible_rooms;
+int num_of_searched_rooms;
 
 int* rooms_visited_init(){
     int* visited_array = (int*)malloc(sizeof(int) * number_of_rooms);
@@ -35,7 +34,6 @@ void count_number_of_rooms(FILE* file){
         if(buffer == ',') 
             number_of_rooms++;
     } while(buffer != '\n');
-    printf("Alright, there are %d rooms in this house and 1 hamster to find.\n", number_of_rooms);
     
     rewind(file);
 }
@@ -55,15 +53,23 @@ void get_rooms_graph_from_file(FILE *file, int **graph_array){
         fgetc(file); // pass CR
         column = 0;
     }
-
-    rewind(file);
 }
 
-void DFS(int room_number, int** rooms_graph, int* rooms_visited){
+void get_num_of_searched_rooms_from_file(FILE *file){
+    char buff;
+
+    do{
+        buff = (char)fgetc(file);
+    } while((buff < 48) || (buff > 57));
+
+    num_of_searched_rooms = (int)(buff  - '0');
+}
+
+void DFS(int room_number, int** rooms_graph, int* rooms_visited, int* num_of_possible_rooms){
     current_depth++;
     printf("Entering room number %d (%d stage(s) from room with cage).\n", room_number, current_depth);
     
-    if(current_depth > D) number_of_possible_rooms++;
+    if(current_depth > num_of_searched_rooms) (*num_of_possible_rooms)++;
 
     rooms_visited[room_number] = true;
 
@@ -75,7 +81,7 @@ void DFS(int room_number, int** rooms_graph, int* rooms_visited){
             if(rooms_visited[neighbour_number] != true){
                 printf(" and it's not been visited yet.\n-->\n", neighbour_number);
                 // call DFS for neighbour
-                DFS(neighbour_number, rooms_graph, rooms_visited);
+                DFS(neighbour_number, rooms_graph, rooms_visited, num_of_possible_rooms);
                 printf(", going back to room number %d.\n<--\n", room_number);
             } else{
                 printf(", but it's already been visited.\n");
@@ -88,10 +94,12 @@ void DFS(int room_number, int** rooms_graph, int* rooms_visited){
 
 int main(){
     current_depth = -1;
-    number_of_possible_rooms = 0;
+    number_of_rooms = 0;
+    num_of_searched_rooms = 0;
     FILE *input_data;
     int **rooms_graph;
     int *rooms_visited;
+    int num_of_possible_rooms = 0;
 
     input_data = fopen("input_data.txt", "r");
     count_number_of_rooms(input_data);
@@ -100,10 +108,15 @@ int main(){
     rooms_visited = rooms_visited_init();
 
     get_rooms_graph_from_file(input_data, rooms_graph);
+    get_num_of_searched_rooms_from_file(input_data);
+    rewind(input_data);
 
-    DFS(0, rooms_graph, rooms_visited);
+    printf("Alright, there are %d rooms in this house and 1 hamster to find.\n", number_of_rooms);
+    printf("ESLCh has already searched max depth of %d counting from the room with cage.\n\n", num_of_searched_rooms);
 
-    printf("\n\nMiranda may be in %d rooms", number_of_possible_rooms);
+    DFS(0, rooms_graph, rooms_visited, &num_of_possible_rooms);
+
+    printf("\n\nMiranda may be in %d rooms", num_of_possible_rooms);
 
     free(rooms_graph);
     free(rooms_visited);
