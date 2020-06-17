@@ -6,6 +6,13 @@ int current_depth;
 int number_of_rooms;
 int num_of_searched_rooms;
 
+/* rooms_visited_init
+ * Allocates array of visited rooms based on 
+ * global variable 'number_of_rooms'
+ * 
+ * return: 
+ *     pointer to array of visited rooms 
+ */
 int* rooms_visited_init(){
     int* visited_array = (int*)malloc(sizeof(int) * number_of_rooms);
     
@@ -16,6 +23,13 @@ int* rooms_visited_init(){
     return visited_array;
 }
 
+/* rooms_graph_init
+ * Allocates 2D array of rooms (main graph) based on 
+ * global variable 'number_of_rooms'
+ * 
+ * return: 
+ *     pointer to 2D array of rooms (main graph)
+ */
 int** rooms_graph_init(){
     int **graph_array = (int**)malloc(sizeof(int *) * number_of_rooms);
     for (int i=0; i<number_of_rooms; i++){
@@ -25,6 +39,14 @@ int** rooms_graph_init(){
     return graph_array;
 }
 
+/* count_number_of_rooms
+ * Reads the first line of file, calculates number of rooms
+ * based on number of ',' in file and stores number of rooms
+ * in global variable 'number_of_rooms'
+ * 
+ * params:
+ *      file: input file with rooms graph
+ */
 void count_number_of_rooms(FILE* file){
     number_of_rooms = 1;
     char buffer = ' ';
@@ -38,6 +60,15 @@ void count_number_of_rooms(FILE* file){
     rewind(file);
 }
 
+/* get_rooms_graph_from_file
+ * Reads file char by char and copies 1's and 0's
+ * to array given as second parameter. Requires correct
+ * number of rooms stored in global variable 'number_of_rooms'
+ * 
+ * params:
+ *      file:        input file with rooms graph and D number
+ *      graph_array: array describing the rooms graph
+ */
 void get_rooms_graph_from_file(FILE *file, int **graph_array){
     char buffer = ' ';
     int row=0, column=0;
@@ -55,6 +86,13 @@ void get_rooms_graph_from_file(FILE *file, int **graph_array){
     }
 }
 
+/* get_num_of_searched_rooms_from_file
+ * Reads file char by char and writes first found number
+ * to global variable 'num_of_searched_rooms' (number D)
+ * 
+ * params:
+ *      file: input file with rooms graph and D number
+ */
 void get_num_of_searched_rooms_from_file(FILE *file){
     char buff;
 
@@ -65,6 +103,16 @@ void get_num_of_searched_rooms_from_file(FILE *file){
     num_of_searched_rooms = (int)(buff  - '0');
 }
 
+/* DFS
+ * Main graph searching recursive function. Function is called on
+ * each not-visited room (graph node).
+ * 
+ * params:
+ *      room_number:            number of room that algorithm is currently in
+ *      rooms_graph:            2D array with 1's and 0's describing the rooms graph
+ *      rooms_visited:          1D array indicating visited rooms
+ *      num_of_possible_rooms:  number of rooms where the hamster can be
+ */
 void DFS(int room_number, int** rooms_graph, int* rooms_visited, int* num_of_possible_rooms){
     current_depth++;
     printf("Entering room number %d (%d stage(s) from room with cage).\n", room_number, current_depth);
@@ -112,7 +160,7 @@ int main(){
     rewind(input_data);
 
     printf("Alright, there are %d rooms in this house and 1 hamster to find.\n", number_of_rooms);
-    printf("ESLCh has already searched max depth of %d counting from the room with cage.\n\n", num_of_searched_rooms);
+    printf("ESLCh has already searched max depth of %d lavels counting from the room with cage.\n\n", num_of_searched_rooms);
 
     DFS(0, rooms_graph, rooms_visited, &num_of_possible_rooms);
 
