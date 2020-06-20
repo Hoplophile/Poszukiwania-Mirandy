@@ -86,22 +86,6 @@ void get_rooms_graph_from_file(FILE *file, int **graph_array){
     }
 }
 
-/* get_num_of_searched_rooms_from_file
- * Reads file char by char and writes first found number
- * to global variable 'num_of_searched_rooms' (number D)
- * 
- * params:
- *      file: input file with rooms graph and D number
- */
-void get_num_of_searched_rooms_from_file(FILE *file){
-    char buff;
-
-    do{
-        buff = (char)fgetc(file);
-    } while((buff < 48) || (buff > 57));
-
-    num_of_searched_rooms = (int)(buff  - '0');
-}
 
 /* DFS
  * Main graph searching recursive function. Function is called on
@@ -127,7 +111,7 @@ void DFS(int room_number, int** rooms_graph, int* rooms_visited, int* num_of_pos
             printf("It is connected with room number %d", neighbour_number);
             // check if found neighbour is not visited
             if(rooms_visited[neighbour_number] != true){
-                printf(" and it's not been visited yet.\n-->\n", neighbour_number);
+                printf(" and it's not been visited yet.\n-->\n");
                 // call DFS for neighbour
                 DFS(neighbour_number, rooms_graph, rooms_visited, num_of_possible_rooms);
                 printf(", going back to room number %d.\n<--\n", room_number);
@@ -156,11 +140,11 @@ int main(){
     rooms_visited = rooms_visited_init();
 
     get_rooms_graph_from_file(input_data, rooms_graph);
-    get_num_of_searched_rooms_from_file(input_data);
+    fscanf(input_data, "%d", &num_of_searched_rooms); // read number D from file
     rewind(input_data);
 
     printf("Alright, there are %d rooms in this house and 1 hamster to find.\n", number_of_rooms);
-    printf("ESLCh has already searched max depth of %d lavels counting from the room with cage.\n\n", num_of_searched_rooms);
+    printf("ESLCh has already searched max depth of %d levels counting from the room with cage.\n\n", num_of_searched_rooms);
 
     DFS(0, rooms_graph, rooms_visited, &num_of_possible_rooms);
 
