@@ -57,7 +57,7 @@ void count_number_of_rooms(FILE* file){
             number_of_rooms++;
     } while(buffer != '\n');
     
-    rewind(file);
+    rewind(file); // set pointer to beginning of file
 }
 
 /* get_rooms_graph_from_file
@@ -141,7 +141,6 @@ int main(){
 
     get_rooms_graph_from_file(input_data, rooms_graph);
     fscanf(input_data, "%d", &num_of_searched_rooms); // read number D from file
-    rewind(input_data);
 
     printf("Alright, there are %d rooms in this house and 1 hamster to find.\n", number_of_rooms);
     printf("ESLCh has already searched max depth of %d levels counting from the room with cage.\n\n", num_of_searched_rooms);
@@ -149,6 +148,8 @@ int main(){
     DFS(0, rooms_graph, rooms_visited, &num_of_possible_rooms);
 
     printf("\n\nMiranda may be in %d rooms", num_of_possible_rooms);
+    printf("\n\nPress enter to exit\n");
+    while(getchar()!='\n');
 
     free(rooms_graph);
     free(rooms_visited);
