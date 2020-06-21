@@ -31,5 +31,5 @@ Wynik programu:
 	znajdować się Miranda i oczekuje na wciśnięcie ENTER przez użytkownika.
 	
 Kompilator:
-	Do pisania algorytmu wykorzystywany był Visual Studio Code.
+	Do pisania algorytmu wykorzystywany był Visual Studio Code na licencji studenckiej.
 	Nie są wymagane żadne zmiany w ustawieniach kompilatora.
