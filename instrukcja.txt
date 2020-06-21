@@ -1,0 +1,31 @@
+Opis algorytmu:
+	Nasz program to zmodyfikowana wersja algorytmu przeszukiwania w głąb.
+	Za każdym przejściem głebiej sprawdzana jest aktualna odległość od pokoju 
+	startowego (z klatką) i jeśli jest ona większa od D, to zwiększamy liczbę pokoi,
+	w których może znajdować się Miranda. Algorytm za każdym razem zaczyna od
+	pokoju z numerem 0.
+	Dodatkowymi elementami programu jest czytanie z pliku mapy pokoi (drzewa) oraz 
+	liczby D, czyli odległości od pokoju z klatką, do jakiej przeszukał ESLCh. Zczytane
+	dane są zapisywane w tablicy alokowanej na sprawdzoną wcześniej liczbę wierzchołków.
+	
+Plik z danymi wejściowymi:
+	W pliku z danymi wejściowymi musi zostać zachowana następująca struktura:
+	<graf jako macierz sąsiedztwa rozdzielona przecinkami>
+	<liczba D>
+	
+	Przykładowa zawartość pliku wejściowego:
+	0,1,1,0,0
+	1,0,0,1,0
+	1,0,0,0,0
+	0,1,0,0,1
+	0,0,0,1,0
+
+	15
+
+Wynik programu:
+	Działanie algorytmu jest krok po kroku wyświetlane użytkownikowi w konsoli.
+	Prezentowane są przejścia między pokojami i znalezione sąsiedztwa. Strzałki
+	"<--" oraz "-->" informują, czy algorytm porusza się odpowiednio: w górę 
+	lub w głąb.
+	Po zakończeniu działania algorytm wyświetla liczbę pokoi, w których może
+	znajdować się Miranda i oczekuje na wciśnięcie ENTER przez użytkownika.
