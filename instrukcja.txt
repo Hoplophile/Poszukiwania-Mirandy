@@ -29,3 +29,7 @@ Wynik programu:
 	lub w głąb.
 	Po zakończeniu działania algorytm wyświetla liczbę pokoi, w których może
 	znajdować się Miranda i oczekuje na wciśnięcie ENTER przez użytkownika.
+	
+Kompilator:
+	Do pisania algorytmu wykorzystywany był Visual Studio Code.
+	Nie są wymagane żadne zmiany w ustawieniach kompilatora.
